@@ -4,15 +4,19 @@
   "description": "repost times-* channel to \"time-all\"",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint . --ext .ts"
+    "dev": "ts-node index.ts",
+    "lint": "eslint . --ext .ts --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@slack/bolt": "^3.17.1"
+    "@slack/bolt": "^3.17.1",
+    "dotenv": "^16.4.4",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@slack/web-api": "^7.0.2",
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@typescript-eslint/parser": "^7.0.1",
