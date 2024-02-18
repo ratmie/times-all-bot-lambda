@@ -1,12 +1,21 @@
 // index.ts
 import dotenv from 'dotenv';
 dotenv.config();
-import { App } from '@slack/bolt';
+import { App, AwsLambdaReceiver } from '@slack/bolt';
+import { Handler } from 'aws-lambda';
+
+const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
+if(!SLACK_SIGNING_SECRET) throw new Error('signing secret is undefined');
+
+// AWS Lambdaのレシーバーを作成
+const awsLambdaReceiver = new AwsLambdaReceiver({
+  signingSecret: SLACK_SIGNING_SECRET
+});
 
 // Slack Appの設定情報
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET
+  receiver: awsLambdaReceiver,
 });
 
 const TIMES_ALL_CHANNEL_ID = process.env.TIMES_ALL_CHANNEL_ID; // `times-all` チャンネルのIDを設定
@@ -19,7 +28,7 @@ app.message(async ({ message, client }) => {
   console.log('received message');
   // メッセージがチャンネルからのものかどうか確認
   if ('channel' in message && message.channel_type === 'channel'  && message.channel !== TIMES_ALL_CHANNEL_ID) {
-    console.log('time-all以外のチャンネル')
+    console.log('time-all以外のチャンネル');
     // チャンネルの情報を取得
     const channelInfo = await client.conversations.info({
       channel: message.channel
@@ -41,8 +50,8 @@ app.message(async ({ message, client }) => {
   }
 });
 
-// アプリの起動
-(async () => {
-  await app.start(process.env.PORT || 3000);
-  console.log('Bolt app is running!');
-})();
+// Lambdaのイベント処理
+export const handler: Handler = async (event, context, callback) => {
+  const handler = await awsLambdaReceiver.start();
+  return handler(event, context, callback);
+};
