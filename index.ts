@@ -23,7 +23,7 @@ if(!TIMES_ALL_CHANNEL_ID) throw new Error('times-all channel is undefined');
 const WORKSPACE_URL = process.env.WORKSPACE_URL; // SlackワークスペースのURLを設定
 if(!WORKSPACE_URL) throw new Error('workspace is undefined');
 
-// 'time-'プレフィックスがついたチャンネルのメッセージを検出
+// 'times-'プレフィックスがついたチャンネルのメッセージを検出
 app.message(async ({ message, client }) => {
   console.log('received message');
   // メッセージがチャンネルからのものかどうか確認
@@ -34,9 +34,9 @@ app.message(async ({ message, client }) => {
       channel: message.channel
     });
     console.log('channelInfo:', channelInfo);
-    // チャンネル名が'time-'で始まる場合、メッセージを'times-all'に転載
+    // チャンネル名が'times-'で始まる場合、メッセージを'times-all'に転載
     if (channelInfo.channel?.name?.startsWith('times-')) {
-      console.log('channel name starts with time-');
+      console.log('channel name starts with times-');
       const messageTimestamp = message.ts.replace('.', '');
       const messageLink = `${WORKSPACE_URL}/archives/${message.channel}/p${messageTimestamp}`;
       await client.chat.postMessage({
