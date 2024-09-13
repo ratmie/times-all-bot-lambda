@@ -6,6 +6,7 @@ https://github.com/ratmie/time-all-bot
 
 ## setting
 
+.envファイルを作成する
 ```
 SLACK_BOT_TOKEN=
 SLACK_SIGNING_SECRET= 
@@ -26,6 +27,10 @@ $ npx tsc // buildする
 $ npm run local
 ```
 
+## deploy
+```sh
+$ serverless deploy --aws-profile myProfileName
+```
 
 ## 資料
 
