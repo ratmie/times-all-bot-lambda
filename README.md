@@ -29,7 +29,7 @@ $ npm run local
 
 ## deploy
 ```sh
-$ serverless deploy --aws-profile myProfileName
+$ AWS_PROFILE=foo npx serverless deploy 
 ```
 
 ## 資料
