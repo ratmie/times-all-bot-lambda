@@ -50,6 +50,14 @@ app.message(async ({ message, client }) => {
   }
 });
 
+app.event('channel_created',async({event, client, logger})=> {
+  if (event.channel.name?.startsWith('times-')) {
+    logger.debug(event.channel.name);
+    await client.conversations.join({ channel: event.channel.id });
+    logger.info(`Joined channel: ${event.channel.name}`);
+  }
+})
+
 // Lambdaのイベント処理
 export const handler: Handler = async (event, context, callback) => {
   const handler = await awsLambdaReceiver.start();
